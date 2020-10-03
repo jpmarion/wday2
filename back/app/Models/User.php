@@ -41,4 +41,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @OA\Schema(
+     *     schema="User",
+     *     title="User",
+     *     description="Representación del usuario",
+     *     @OA\Property(type="integer", property="id", description="Id del usuario"),
+     *     @OA\Property(type="string", property="name", description="Nombre del usuario"),
+     *     @OA\Property(type="string", property="email", format="email", description="Email del usuario"),
+     *     @OA\Property(type="string", format="date-time", property="email_verified_at", description="Cuando el usuario verifica su email", nullable=true),
+     *     @OA\Property(type="boolean", property="active", description="Si usuario se encuentra activo")
+     * )
+     */
 }
