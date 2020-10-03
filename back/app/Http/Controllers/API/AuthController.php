@@ -67,8 +67,9 @@ class AuthController extends Controller
     {
         $user = new User([
             'email' => $request->email,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation
+            'password' => bcrypt($request->password),
+            'password_confirmation' => $request->password_confirmation,
+            'activation_token'  => bcrypt($request->email)
         ]);
         $user->save();
         return response()->json(['mensaje' => "Usuario creado exitosamente"], 201);
@@ -109,6 +110,8 @@ class AuthController extends Controller
     public function login(AuthLoginRequest $request)
     {
         $credentials = request(['email', 'password']);
+        $credentials['active'] = 1;
+        $credentials['deleted_at'] = null;
         if (!Auth::attempt($credentials)) {
             return response()->json(['mensaje' => 'No autorizado'], 401);
         }
@@ -202,5 +205,21 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function signupActivate($token)
+    {
+        $user = User::where('activation_token', $token)->first();
+        if (!$user) {
+            return response()->json([
+                'mensaje' => 'El token de activación es inválido'
+            ], 404);
+        }
+
+        $user->active = true;
+        $user->activation_token = '';
+        $user->save();
+
+        return $user;
     }
 }
