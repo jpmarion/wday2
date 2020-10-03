@@ -29,4 +29,15 @@ class AuthSignupRequest extends FormRequest
             'password_confirmation' => 'required|string'
         ];
     }
+
+    /**
+     * @OA\Schema(
+     *     schema="AuthSignupRequest",
+     *     title="AuthSignupRequest",
+     *     description="Signup Request",
+     *     @OA\Property(type="string", property="email", format="email", description="Email del usuario"),
+     *     @OA\Property(type="string", property="password", format="password", description="Contraseña del usuario"),
+     *     @OA\Property(type="string", property="password_confirmation", format="password", description="Confirmar contraseña del usuario")
+     * )
+     */
 }

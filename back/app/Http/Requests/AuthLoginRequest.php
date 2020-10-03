@@ -29,4 +29,15 @@ class AuthLoginRequest extends FormRequest
             'remember_me' => 'boolean'
         ];
     }
+
+    /**
+     * @OA\Schema(
+     *     schema="AuthLoginRequest",
+     *     title="AuthLoginRequest",
+     *     description="Login Request",
+     *     @OA\Property(type="string", property="email", format="email", description="Email del usuario"),
+     *     @OA\Property(type="string", property="password", format="password", description="Contraseña del usuario"),
+     *     @OA\Property(type="boolean", property="remember_me",  description="Recordar conexión del usuario")
+     * )
+     */
 }
