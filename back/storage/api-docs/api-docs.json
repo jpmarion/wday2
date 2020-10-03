@@ -124,6 +124,44 @@
                     }
                 ]
             }
+        },
+        "/api/auth/user": {
+            "get": {
+                "tags": [
+                    "AuthController"
+                ],
+                "summary": "Datos del usuario",
+                "operationId": "user",
+                "responses": {
+                    "200": {
+                        "description": "Usuario",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud no válida"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    },
+                    "422": {
+                        "description": "Error validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -167,6 +205,36 @@
                         "description": "Confirmar contraseña del usuario",
                         "type": "string",
                         "format": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "Representación del usuario",
+                "properties": {
+                    "id": {
+                        "description": "Id del usuario",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nombre del usuario",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Email del usuario",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "email_verified_at": {
+                        "description": "Cuando el usuario verifica su email",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "active": {
+                        "description": "Si usuario se encuentra activo",
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
