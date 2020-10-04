@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthLoginRequest;
 use App\Http\Requests\AuthSignupRequest;
 use App\Models\User;
+use App\Notifications\SignupActivate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  *  @OA\Info(
@@ -64,14 +66,22 @@ class AuthController extends Controller
      */
     public function signup(AuthSignupRequest $request)
     {
-        $user = new User([
-            'name' => '',
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'activation_token'  => bcrypt($request->email)
-        ]);
-        $user->save();
-        return response()->json(['mensaje' => "Usuario creado exitosamente"], 201);
+        DB::beginTransaction();
+        try {
+            $user = new User([
+                'name' => '',
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'activation_token'  => bcrypt($request->email)
+            ]);
+            $user->save();
+            $user->notify(new SignupActivate($user));
+            DB::commit();
+            return response()->json(['mensaje' => "Usuario creado exitosamente"], 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
