@@ -35,12 +35,11 @@ class AuthController extends Controller
      * @OA\Post(
      *      path="/api/auth/signup",
      *      tags={"AuthController"},
-     *      summary="Signup de usuario",
+     *      summary="Crear de usuario",
      *      operationId="signupAuthController",
-     *      @OA\Parameter(
-     *          name="Signup",
-     *          in="query",
-     *          @OA\JsonContent(ref="#/components/schemas/AuthSignupRequest"),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/AuthSignupRequest")
      *      ),
      *      @OA\Response(
      *          response=201,
@@ -66,9 +65,9 @@ class AuthController extends Controller
     public function signup(AuthSignupRequest $request)
     {
         $user = new User([
+            'name' => '',
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'password_confirmation' => $request->password_confirmation,
             'activation_token'  => bcrypt($request->email)
         ]);
         $user->save();
