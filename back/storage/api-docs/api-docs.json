@@ -18,21 +18,18 @@
                 "tags": [
                     "AuthController"
                 ],
-                "summary": "Signup de usuario",
+                "summary": "Crear de usuario",
                 "operationId": "signupAuthController",
-                "parameters": [
-                    {
-                        "name": "Signup",
-                        "in": "query",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/AuthSignupRequest"
-                                }
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthSignupRequest"
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "201": {
                         "description": "Usuario creado",
@@ -162,6 +159,142 @@
                     }
                 ]
             }
+        },
+        "/api/password/create": {
+            "post": {
+                "tags": [
+                    "PasswordResetController"
+                ],
+                "summary": "Restablecer contraseña del usuario",
+                "operationId": "createPasswordResetController",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "query",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PasswordResetCreateRequest"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contraseña restablecida",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud no válida"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    },
+                    "422": {
+                        "description": "Error validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/password/find": {
+            "get": {
+                "tags": [
+                    "PasswordResetController"
+                ],
+                "summary": "Si el token está activo, la respuesta contendrá los datos de éste",
+                "operationId": "logoutAuthController",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sesión cerrada",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud no válida"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    },
+                    "404": {
+                        "description": "No encontrado"
+                    },
+                    "422": {
+                        "description": "Error validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/password/reset": {
+            "post": {
+                "tags": [
+                    "PasswordResetController"
+                ],
+                "summary": "Si token activo devuelve usuario",
+                "operationId": "resetPasswordResetController",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "query",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PasswordResetResetRequest"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud no válida"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    },
+                    "422": {
+                        "description": "Error validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -205,6 +338,39 @@
                         "description": "Confirmar contraseña del usuario",
                         "type": "string",
                         "format": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "PasswordResetCreateRequest": {
+                "title": "PasswordResetCreateRequest",
+                "description": "Password Reset Create Request",
+                "properties": {
+                    "email": {
+                        "description": "Email del usuario",
+                        "type": "string",
+                        "format": "email"
+                    }
+                },
+                "type": "object"
+            },
+            "PasswordResetResetRequest": {
+                "title": "PasswordResetResetRequest",
+                "description": "Password Reset Request",
+                "properties": {
+                    "email": {
+                        "description": "Email del usuario",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "description": "Contraseña del usuario",
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "token": {
+                        "description": "Token del usuario",
+                        "type": "string"
                     }
                 },
                 "type": "object"

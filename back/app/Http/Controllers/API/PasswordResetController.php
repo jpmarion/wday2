@@ -9,10 +9,42 @@ use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetRequestNotification;
 use App\Notifications\PasswordResetSuccessNotification;
-use Illuminate\Http\Request;
 
 class PasswordResetController extends Controller
 {
+    /**
+     * @OA\Post(
+     *      path="/api/password/create",
+     *      tags={"PasswordResetController"},
+     *      summary="Restablecer contraseña del usuario",
+     *      operationId="createPasswordResetController",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="login",
+     *          in="query",
+     *          @OA\JsonContent(ref="#/components/schemas/PasswordResetCreateRequest"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Contraseña restablecida",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Solicitud no válida"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="No autorizado"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Error validación"
+     *      )
+     *)
+     */
     /**
      * Create token password reset
      *
@@ -45,6 +77,45 @@ class PasswordResetController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/password/find",
+     *      tags={"PasswordResetController"},
+     *      summary="Si el token está activo, la respuesta contendrá los datos de éste",
+     *      operationId="logoutAuthController",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="token",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Sesión cerrada",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Solicitud no válida"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="No autorizado"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="No encontrado"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Error validación"
+     *      )
+     *  )
+     */
+    /**
      * Find token password reset
      *
      * @param  [string] $token
@@ -68,6 +139,37 @@ class PasswordResetController extends Controller
         return response()->json($passwordReset);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/password/reset",
+     *      tags={"PasswordResetController"},
+     *      summary="Si token activo devuelve usuario",
+     *      operationId="resetPasswordResetController",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="login",
+     *          in="query",
+     *          @OA\JsonContent(ref="#/components/schemas/PasswordResetResetRequest"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Usuario",
+     *          @OA\JsonContent(ref="#/components/schemas/User"),
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Solicitud no válida"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="No autorizado"
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Error validación"
+     *      )
+     *)
+     */
     public function reset(PasswordResetResetRequest $request)
     {
         $passwordReset = PasswordReset::where('token', $request->token)->first();
