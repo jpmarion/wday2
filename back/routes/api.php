@@ -23,3 +23,13 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('user', 'App\Http\Controllers\API\AuthController@user');
     });
 });
+
+Route::group([
+    'namespace' => 'Auth',
+    'middleware' => 'api',
+    'prefix' => 'password'
+], function () {
+    Route::post('create', 'App\Http\Controllers\API\PasswordResetController@create');
+    Route::get('find/{token}', 'App\Http\Controllers\API\PasswordResetController@find');
+    Route::post('reset', 'App\Http\Controllers\API\PasswordResetController@reset');
+});
