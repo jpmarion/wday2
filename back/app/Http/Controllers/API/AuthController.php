@@ -7,6 +7,7 @@ use App\Http\Requests\AuthLoginRequest;
 use App\Http\Requests\AuthSignupRequest;
 use App\Models\User;
 use App\Notifications\SignupActivate;
+use App\Notifications\SignupOk;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -218,17 +219,22 @@ class AuthController extends Controller
 
     public function signupActivate($token)
     {
-        $user = User::where('activation_token', $token)->first();
-        if (!$user) {
-            return response()->json([
-                'mensaje' => 'El token de activación es inválido'
-            ], 404);
+        DB::beginTransaction();
+        try {
+            $user = User::where('activation_token', $token)->first();
+            if (!$user) {
+                return response()->json([
+                    'mensaje' => 'El token de activación es inválido'
+                ], 404);
+            }
+            $user->active = true;
+            $user->activation_token = '';
+            $user->save();
+            $user->notify(new SignupOk());
+            DB::commit();
+        } catch (\Exception $th) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        $user->active = true;
-        $user->activation_token = '';
-        $user->save();
-
-        return $user;
     }
 }
