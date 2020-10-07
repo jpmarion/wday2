@@ -185,7 +185,7 @@ class AuthController extends Controller
      *      path="/api/auth/user",
      *      tags={"AuthController"},
      *      summary="Datos del usuario",
-     *      operationId="user",
+     *      operationId="userAuthController",
      *      security={{"bearerAuth":{}}},
      *
      *      @OA\Response(
