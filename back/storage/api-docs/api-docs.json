@@ -56,19 +56,16 @@
                 ],
                 "summary": "Login de usuario",
                 "operationId": "loginAuthController",
-                "parameters": [
-                    {
-                        "name": "login",
-                        "in": "query",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/AuthLoginRequest"
-                                }
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthLoginRequest"
                             }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Usuario logueado",
