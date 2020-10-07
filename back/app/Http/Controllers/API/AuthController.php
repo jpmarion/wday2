@@ -91,10 +91,9 @@ class AuthController extends Controller
      *      tags={"AuthController"},
      *      summary="Login de usuario",
      *      operationId="loginAuthController",
-     *      @OA\Parameter(
-     *          name="login",
-     *          in="query",
-     *          @OA\JsonContent(ref="#/components/schemas/AuthLoginRequest"),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/AuthLoginRequest")
      *      ),
      *      @OA\Response(
      *          response=200,
