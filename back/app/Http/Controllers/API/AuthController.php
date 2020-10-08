@@ -177,7 +177,7 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'mensaje' => 'Cerrar sesión correctamente'
-        ]);
+        ],200);
     }
 
     /**

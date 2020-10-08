@@ -125,7 +125,7 @@
                     "AuthController"
                 ],
                 "summary": "Datos del usuario",
-                "operationId": "user",
+                "operationId": "userAuthController",
                 "responses": {
                     "200": {
                         "description": "Usuario",
