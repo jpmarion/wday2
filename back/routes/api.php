@@ -19,7 +19,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('signup', 'App\Http\Controllers\API\AuthController@signup');
     Route::get('signup/activate/{token}', 'App\Http\Controllers\API\AuthController@signupActivate');
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'App\Http\Controllers\API\AuthController@signup');
+        Route::get('logout', 'App\Http\Controllers\API\AuthController@logout');
         Route::get('user', 'App\Http\Controllers\API\AuthController@user');
     });
 });
