@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Src\Autenticacion\User\Infraestructura\Interfaces\AutenticacionItf;
 
 /**
  *  @OA\Info(
@@ -34,6 +35,14 @@ use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
+
+    private $autenticacionCtrl;
+
+    public function __construct(AutenticacionItf $autenticacionCtrl
+    ) {
+        $this->autenticacionCtrl = $autenticacionCtrl;
+    }
+
     /**
      * @OA\Post(
      *      path="/api/auth/signup",
@@ -67,22 +76,24 @@ class AuthController extends Controller
      */
     public function signup(AuthSignupRequest $request)
     {
-        DB::beginTransaction();
-        try {
-            $user = new User([
-                'name' => '',
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'activation_token'  => bcrypt($request->email)
-            ]);
-            $user->save();
-            $user->notify(new SignupActivate($user));
-            DB::commit();
-            return response()->json(['mensaje' => "Usuario creado exitosamente"], 201);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $this->autenticacionCtrl->signup($request);
+        return response()->json(['mensaje' => "Usuario creado exitosamente"], 201);
+        // DB::beginTransaction();
+        // try {
+        //     $user = new User([
+        //         'name' => '',
+        //         'email' => $request->email,
+        //         'password' => bcrypt($request->password),
+        //         'activation_token'  => bcrypt($request->email)
+        //     ]);
+        //     $user->save();
+        //     $user->notify(new SignupActivate($user));
+        //     DB::commit();
+        //     return response()->json(['mensaje' => "Usuario creado exitosamente"], 201);
+        // } catch (\Exception $e) {
+        //     DB::rollback();
+        //     return response()->json(['error' => $e->getMessage()], 500);
+        // }
     }
 
     /**
@@ -177,7 +188,7 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'mensaje' => 'Cerrar sesión correctamente'
-        ],200);
+        ], 200);
     }
 
     /**

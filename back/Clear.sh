@@ -8,3 +8,6 @@ php artisan route:clear
 
 echo Limpiar config
 php artisan config:clear
+
+echo Reset Apache
+ /etc/init.d/apache2 restart
