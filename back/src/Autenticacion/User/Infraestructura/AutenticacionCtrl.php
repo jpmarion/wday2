@@ -26,6 +26,5 @@ private $repositorio;
 
         $sigunoUserCU = new SignupUserCU($this->repositorio);
         $sigunoUserCU->__invoke($userEmail,$userPassword,$userActivationToken);
-
     }
 }

@@ -7,6 +7,8 @@ namespace Src\Autenticacion\User\Infraestructura\Repositorios;
 use App\Models\User as EloquentUserModel;
 use Src\Autenticacion\User\Dominio\Interfaces\UserRepositorioItf;
 use Src\Autenticacion\User\Dominio\UserDmn;
+use Src\Autenticacion\User\Infraestructura\Enum\TipoNotificacionEnum;
+use Src\Autenticacion\User\Infraestructura\Factorias\TipoNotificacionFct as FactoriasTipoNotificacionFct;
 
 final class EloquentUserRps implements UserRepositorioItf
 {
@@ -35,8 +37,10 @@ final class EloquentUserRps implements UserRepositorioItf
     /**
      *
      */
-    public function notify(): void
+    public function notify(int $tipoNotificacionEnum): void
     {
-        # code...
+        $tipoNotificacionFct = new FactoriasTipoNotificacionFct;
+        $notificacion = $tipoNotificacionFct->__invoke($tipoNotificacionEnum, $this->eloquentUserModel);
+        $this->eloquentUserModel->notify($notificacion);
     }
 }

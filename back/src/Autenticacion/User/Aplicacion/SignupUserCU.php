@@ -7,9 +7,9 @@ namespace Src\Autenticacion\User\Aplicacion;
 use Src\Autenticacion\User\Dominio\Interfaces\UserRepositorioItf;
 use Src\Autenticacion\User\Dominio\ObjetoValor\UserActivationToken;
 use Src\Autenticacion\User\Dominio\ObjetoValor\UserEmail;
-use Src\Autenticacion\User\Dominio\ObjetoValor\UserName;
 use Src\Autenticacion\User\Dominio\ObjetoValor\UserPassword;
 use Src\Autenticacion\User\Dominio\UserDmn;
+use Src\Autenticacion\User\Infraestructura\Enum\TipoNotificacionEnum;
 
 final class SignupUserCU
 {
@@ -40,5 +40,6 @@ final class SignupUserCU
         $activationToken = new UserActivationToken($activationToken);
         $user = new UserDmn($email, $password, $activationToken);
         $this->repositorio->save($user);
+        $this->repositorio->notify(TipoNotificacionEnum::SignupActivate);
     }
 }
